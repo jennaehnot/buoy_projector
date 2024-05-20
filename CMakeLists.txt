@@ -28,6 +28,7 @@ catkin_package(
 
 catkin_install_python(PROGRAMS
   src/projector.py
+  src/marker.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -42,6 +43,13 @@ target_link_libraries(cam_info ${catkin_LIBRARIES})
 install(TARGETS cam_info
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+install(DIRECTORY
+  launch
+  include
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+  USE_SOURCE_PERMISSIONS
+)
+
 #install(TARGETS buoy_projector
 #  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
