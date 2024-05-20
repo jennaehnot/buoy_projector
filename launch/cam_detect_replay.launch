@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="bag_file"/>
+  <arg name="rgb_in_topic" default="/sensors/rgb_cam/image_raw_resized"/>
+  <arg name="rgb_out_topic" default="/sensors/rgb_cam/image_raw_resized"/>
+  <param name="/use_sim_time" value="true"/>
+  
+  <group ns="lever_arms">  
+    <node pkg="tf2_ros" type="static_transform_publisher" name="rgb_cam" args=".34 -.015 2.089 0 0 0 rolled_pitched_ref_point rgb_cam" output="screen" required="true"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="ship_ref_point" args="0 0 0 -1.57079 0 -1.57079 rgb_cam rgb_cam_optical"/>  
+  </group>
+
+  <!-- Camera info and Projection node-->
+  <include file="$(find buoy_projector)/launch/camera_tf.launch"/>
+
+  <!-- Buoy projection MARKER-->
+
+  <node pkg="rosbag" type="play" name="bagplay" args="--clock --start 70 $(arg bag_file)">
+  </node>
+  
+
+</launch>
