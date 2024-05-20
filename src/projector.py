@@ -19,16 +19,16 @@ class Projector:
       self.tf_buffer = tf2_ros.Buffer()
       self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
       self.detection_sub = rospy.Subscriber("/yolo/detections", Detection2DArray, self.detection_callback)
-      self.cam_info_sub = rospy.Subscriber("/buoy_projector/camera_info",CameraInfo, self.camera_info_callback)
+      self.cam_info_sub = rospy.Subscriber("/rgb_camera_info/camera_info", CameraInfo, self.camera_info_callback)
       self.projection_pub = rospy.Publisher("/rgb_projections",CartesianMeasure,queue_size=5)
    
    def detection_callback(self,detection_msg):
 
       # load paras for tf
-      if rospy.has_param('/projector/from_tf') and rospy.has_param('/projector/to_tf'):
-         self.from_tf = rospy.get_param('/projector/from_tf')
-         self.to_tf = rospy.get_param('/projector/to_tf')
-         self.cartPlot_confidence =rospy.get_param('/projector/cartPlot_confidence')
+      if rospy.has_param('/buoy_projection/from_tf') and rospy.has_param('/buoy_projection/to_tf'):
+         self.from_tf = rospy.get_param('/buoy_projection/from_tf')
+         self.to_tf = rospy.get_param('/buoy_projection/to_tf')
+         self.cartPlot_confidence =rospy.get_param('/buoy_projection/cartPlot_confidence')
       else:
          rospy.logerr("Somethings wrong with you tf params")
 
@@ -47,6 +47,7 @@ class Projector:
          # prep msg to be published
          target = CartesianMeasure() 
          target.header = detection_msg.header
+         target.header.frame_id = self.to_tf
          target.sensor_id = "rgb_cam"
 
          for detect in detection_msg.detections:
@@ -108,7 +109,6 @@ class Projector:
       pass
 
 if __name__ == '__main__':
-   print("PATH: "+ cm.__file__)
    rospy.init_node('projector')
    Projector()
    rospy.spin()
