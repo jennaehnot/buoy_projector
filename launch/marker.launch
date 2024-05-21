@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Launch Marker-->
+  <node pkg="buoy_projector" type="marker.py" name="rgb_projection_visualization"/>
+
+</launch> 

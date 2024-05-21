@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- ARGS projector node-->
+  <arg name="from_tf" default="rgb_cam"/>
+  <arg name="to_tf" default="ship_ref_point"/>
+  <arg name="cartPlot_confidence" default="20"/>
+   
+  <!-- Launch <projector node -->
+  <node pkg="buoy_projector" type="projector.py" name="buoy_projection" output="screen">
+    <param name="from_tf" value="$(arg from_tf)"/>
+    <param name="to_tf" value="$(arg to_tf)"/>
+    <param name="cartPlot_confidence" value="$(arg cartPlot_confidence)"/>
+    <param name="rgb2tracker" value="0"/>
+  </node>
+</launch>

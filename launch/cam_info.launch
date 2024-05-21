@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- ARGS Camera info publisher -->
+  <arg name="calibration_path_url" default="file://$(find opencv_dnn)/config/calibration720x465.yaml"/>
+  <arg name="camera_name" default="camera"/>
+  
+   <!-- LAUNCH Camera info -->
+  <node pkg="buoy_projector" type="cam_info" name="rgb_camera_info" output="screen">
+    <param name="calibration_path" value="$(arg calibration_path_url)"/>
+    <param name="camera_name" value="$(arg camera_name)"/>
+  </node>
+
+</launch>

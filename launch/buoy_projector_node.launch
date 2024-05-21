@@ -1,11 +1,5 @@
 <?xml version="1.0"?>
 <launch>
-  <!--ARGS bagfile -->
-  <arg name="bag_file"/>
-
-  <!-- ARGS Repub rgb image -->
-  <arg name="rgb_in_topic" default="/sensors/rgb_cam/image_raw_resized"/>
-  <arg name="rgb_out_topic" default="/sensors/rgb_cam/image_raw_resized/image_raw"/>
 
   <!-- ARGS Camera info publisher -->
   <arg name="calibration_path_url" default="file://$(find opencv_dnn)/config/calibration720x465.yaml"/>
@@ -17,23 +11,13 @@
   <arg name="to_tf" default="ship_ref_point"/>
   <arg name="cartPlot_confidence" default="20"/>
    
-
-  <!-- Launch tf static-->
-  <group ns="lever_arms">  
-    <node pkg="tf2_ros" type="static_transform_publisher" name="rgb_cam" args=".34 -.015 2.089 0 0 0 rolled_pitched_ref_point rgb_cam" output="screen" required="true"/>
-    <node pkg="tf2_ros" type="static_transform_publisher" name="ship_ref_point" args="0 0 0 -1.57079 0 -1.57079 rgb_cam rgb_cam_optical"/>  
-  </group>
-
-  <!-- Camera info -->
+  <!-- LAUNCH Camera info -->
   <node pkg="buoy_projector" type="cam_info" name="rgb_camera_info" output="screen">
     <param name="calibration_path" value="$(arg calibration_path_url)"/>
     <param name="camera_name" value="$(arg camera_name)"/>
   </node>
 
-  <!-- Republish compressed rgb image -->
-  <node pkg="image_transport" type="republish" name="rgb_raw_image_publisher" args="compressed in:=$(arg rgb_in_topic) raw out:=$(arg rgb_out_topic)"/>
-
-  <!-- Launch <projector node -->
+  <!-- LAUNCh <projector node -->
   <node pkg="buoy_projector" type="projector.py" name="buoy_projection" output="screen">
     <param name="from_tf" value="$(arg from_tf)"/>
     <param name="to_tf" value="$(arg to_tf)"/>
@@ -41,12 +25,7 @@
     <param name="rgb2tracker" value="0"/>
   </node>
 
-  <!-- Launch Marker-->
+  <!-- LAUNCH Marker-->
   <node pkg="buoy_projector" type="marker.py" name="rgb_projection_visualization"/>
   
-  <!-- bag replay-->
-  <node pkg="rosbag" type="play" name="bagplay" args="--clock -l -d 3 --start 75 $(arg bag_file)">
-  </node>
-  
-
 </launch>
