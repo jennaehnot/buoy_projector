@@ -5,20 +5,20 @@
    <arg name="from_tf" default="rgb_cam"/>
    <arg name="to_tf" default="ship_ref_point"/>
    <arg name="cartPlot_confidence" default="50"/>
-   
-    <group ns="lever_arms">  
-        <node pkg="tf2_ros" type="static_transform_publisher" name="ship_ref_point" args="0 0 0 0 0 0 1 world ship_ref_point" output="screen" required="true"/>
-        <node pkg="tf2_ros" type="static_transform_publisher" name="rgb_cam" args=".34 -.015 2.089 0 0 0 ship_ref_point rgb_cam" output="screen" required="true"/>
-    </group>
+    <param name="/use_sim_time" value="true"/>
 
-    <node pkg="buoy_projector" type="cam_info" name="buoy_projector" output="screen">
+
+    <node pkg="buoy_projector" type="cam_info" name="rgb_camera_info" output="screen">
         <param name="calibration_path" value="$(arg calibration_path_url)"/>
         <param name="camera_name" value="$(arg camera_name)"/>
+        <param name="/use_sim_time" value="true"/>
+
     </node>
 
-    <node pkg="buoy_projector" type="projector.py" name="projector" output="screen">
+    <node pkg="buoy_projector" type="projector.py" name="buoy_projection" output="screen">
         <param name="from_tf" value="$(arg from_tf)"/>
         <param name="to_tf" value="$(arg to_tf)"/>
         <param name="cartPlot_confidence" value="$(arg cartPlot_confidence)"/>
+        <remap from="rgb_projections" to="cortix/sense/ros_interface/detection/cartesian_plots"/>
     </node>
 </launch>
