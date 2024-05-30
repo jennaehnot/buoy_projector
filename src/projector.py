@@ -83,7 +83,6 @@ class Projector:
                   pixel_in_camera_frame.pose.position.y = ray[1]
                   pixel_in_camera_frame.pose.position.z = ray[2]
                   pixel_in_camera_frame.pose.orientation.w = 1.0
-
                   try:
                      transformation = self.tf_buffer.lookup_transform(self.to_tf, "rgb_cam_optical", detection_msg.header.stamp, rospy.Duration(1.0))
                      pixel_in_ship_frame = tf2_geometry_msgs.do_transform_pose(pixel_in_camera_frame, transformation)

@@ -2,7 +2,7 @@
 <launch>
 
   <!-- ARGS Camera info publisher -->
-  <arg name="calibration_path_url" default="file://$(find opencv_dnn)/config/calibration720x465.yaml"/>
+  <arg name="calibration_path_url" default="file://$(find opencv_dnn)/config/calibrationDrix29_720x465.yaml"/>
   <arg name="camera_name" default="camera"/>
   <param name="/use_sim_time" value="true"/>
   
