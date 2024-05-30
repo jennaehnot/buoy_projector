@@ -4,12 +4,11 @@
   <!-- ARGS Camera info publisher -->
   <arg name="calibration_path_url" default="file://$(find opencv_dnn)/config/calibrationDrix29_720x465.yaml"/>
   <arg name="camera_name" default="camera"/>
-  <param name="/use_sim_time" value="true"/>
   
   <!-- ARGS projector node-->
   <arg name="from_tf" default="rgb_cam"/>
   <arg name="to_tf" default="ship_ref_point"/>
-  <arg name="cartPlot_confidence" default="20"/>
+  <arg name="cartPlot_confidence" default="15"/>
    
   <!-- LAUNCH Camera info -->
   <node pkg="buoy_projector" type="cam_info" name="rgb_camera_info" output="screen">
@@ -17,12 +16,12 @@
     <param name="camera_name" value="$(arg camera_name)"/>
   </node>
 
-  <!-- LAUNCh <projector node -->
+  <!-- LAUNCh projector node -->
   <node pkg="buoy_projector" type="projector.py" name="buoy_projection" output="screen">
     <param name="from_tf" value="$(arg from_tf)"/>
     <param name="to_tf" value="$(arg to_tf)"/>
     <param name="cartPlot_confidence" value="$(arg cartPlot_confidence)"/>
-    <param name="rgb2tracker" value="0"/>
+    <param name="rgb2tracker" value="true"/>
   </node>
 
   <!-- LAUNCH Marker-->
