@@ -100,12 +100,15 @@ class Projector:
                      P.pos.x = p1.x + u*(p2.x - p1.x)
 
                      #filter out impossible detections
-                     if (P.pos.x > 0) and (P.pos.x < 100):
+                     if (P.pos.x > 5) and (P.pos.x < 100):
                         P.pos.y = p1.y + u*(p2.y - p1.y) 
                         P.pos.z = 0
-                        P.sigma_xx = P.sigma_yy = P.sigma_xy = 5
+                        P.sigma_xx = 40
+                        P.sigma_yy = 10
+                        P.sigma_xy = 5
                         P.confidence = self.cartPlot_confidence
-                        P.speed_confidence = P.cog = P.sog = 0
+                        P.speed_confidence = 50
+                        P.cog = P.sog = 0
                         target.detections.append(P)
 
             self.projection_pub.publish(target)
