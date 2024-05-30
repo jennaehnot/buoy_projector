@@ -10,6 +10,6 @@
     <param name="from_tf" value="$(arg from_tf)"/>
     <param name="to_tf" value="$(arg to_tf)"/>
     <param name="cartPlot_confidence" value="$(arg cartPlot_confidence)"/>
-    <param name="rgb2tracker" value="0"/>
+    <param name="rgb2tracker" value="true"/>
   </node>
 </launch>
