@@ -114,17 +114,13 @@ class Projector:
             self.projection_pub.publish(target)
 
             # publish to tracker
-            if rospy.get_param('/rgb2tracker') is 1:
+            if rospy.get_param('/buoy_projection/rgb2tracker'):
                self.cartesian_publish.publish(target)            
 
 
    def camera_info_callback(self, cam_msg):
       self.camera_model = cm.PinholeCameraModel()
       self.camera_model.fromCameraInfo(cam_msg)
-      pass
-
-   def ins_callback(self, ins_msg):
-      self.heave=ins_msg.smart_heave_m
       pass
 
 if __name__ == '__main__':
