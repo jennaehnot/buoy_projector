@@ -5,8 +5,7 @@ import tf2_geometry_msgs
 import image_geometry.cameramodels as cm
 from vision_msgs.msg import Detection2DArray
 from geometry_msgs.msg import PoseStamped
-from mdt_msgs.msg import CartesianMeasure, CartesianPlot
-from cortix_msgs.msg import Ins
+from mdt_msgs.msg import CartesianMeasure, CartesianPlot, FreespacePolygon
 import std_msgs.msg
 from sensor_msgs.msg import CameraInfo
 
@@ -17,14 +16,12 @@ class Projector:
       self.to_tf = ''
       self.from_tf = ''
       self.cartPlot_confidence = ''
-      self.heave=''
       self.tf_buffer = tf2_ros.Buffer()
       self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
       self.detection_sub = rospy.Subscriber("/yolo/detections", Detection2DArray, self.detection_callback)
       self.cam_info_sub = rospy.Subscriber("/rgb_camera_info/camera_info", CameraInfo, self.camera_info_callback)
       self.projection_pub = rospy.Publisher("/rgb_projections",CartesianMeasure,queue_size=5)
       self.cartesian_publish = rospy.Publisher("cortix/sense/ros_interface/detection/cartesian_plots",CartesianMeasure,queue_size=5)
-      self.ins_subscriber = rospy.Subscriber("/pos/d_phins/ins",Ins, self.ins_callback)
 
    def detection_callback(self,detection_msg):
 
@@ -45,15 +42,19 @@ class Projector:
          # create camera position in ship reference frame
          camera_origin = PoseStamped()
          camera_origin.pose.orientation.w = 1.0
-
          camera_in_ship_frame = tf2_geometry_msgs.do_transform_pose(camera_origin, transformation)
          p1 = camera_in_ship_frame.pose.position
-         p1.z = p1.z - self.heave
+         
          # prep msg to be published
          target = CartesianMeasure() 
          target.header = detection_msg.header
          target.header.frame_id = self.to_tf
          target.sensor_id = "rgb_cam"
+         target.freespace_polygons.append(FreespacePolygon())
+         target.freespace_polygons[0].polygon = "POLYGON((129.9038106 -75,0 0,129.9038106 75,137.732416 59.41196491,143.6984268 43.02048491,147.721163 \
+            26.04722665,149.7462237 8.721724337,149.7462237 -8.721724337,147.721163 -26.04722665,143.6984268 \
+            -43.02048491,137.732416 -59.41196491,129.9038106 -75))"
+         target.freespace_polygons[0].confidence = 10
 
          for detect in detection_msg.detections:
             # for each detection in the detection message, create a cartesianPlot msg
